@@ -10,7 +10,7 @@ export default function Home() {
         <Image src={FEATURED} alt="featured product" fill loading="eager"/>
       </div>
       <Categories/>
-      <ProductsList/>
+      <ProductsList isHomePage={true}/>
     </div>
   );
 }

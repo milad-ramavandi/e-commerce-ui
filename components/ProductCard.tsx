@@ -55,7 +55,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
               {product.colors.map((color) => (
                 <div
                   key={color}
-                  className={`w-5.5 h-5.5 rounded-full border-2 cursor-pointer ${controlSizeAndColor.color === color ? "border-gray-400 scale-105" : "border-gray-200"}`}
+                  className={`w-5.5 h-5.5 rounded-full border-2 cursor-pointer ${controlSizeAndColor.color === color ? "border-gray-400 scale-125" : "border-gray-200"}`}
                   style={{ backgroundColor: `${color}` }}
                   onClick={() => SizeAndColorHandler("color", color)}
                 ></div>
