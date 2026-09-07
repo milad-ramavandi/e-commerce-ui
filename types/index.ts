@@ -8,3 +8,8 @@ export interface IProduct {
   colors: string[];
   images: Record<string, string>;
 };
+
+export interface IControlSizeAndColor {
+  size:string;
+  color:string
+}

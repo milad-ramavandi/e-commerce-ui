@@ -65,7 +65,7 @@ const Categories = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const selectedCategory = searchParams.get("category");
+  const selectedCategory = searchParams.get("category") || "all";
 
   const checkForScrollPosition = () => {
     if (!scrollRef.current) return;
