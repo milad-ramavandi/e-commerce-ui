@@ -13,3 +13,9 @@ export interface IControlSizeAndColor {
   size:string;
   color:string
 }
+
+export interface ICart extends IProduct {
+  quantity:number;
+  selectedColor:string;
+  selectedSize:string
+}
