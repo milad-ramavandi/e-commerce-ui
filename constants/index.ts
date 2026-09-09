@@ -1,14 +1,21 @@
-// ADDRESS LOCAL IMAGE
-
 import { ICart, IProduct } from "@/types";
+
+
+
+// ADDRESS LOCAL IMAGE
 
 export const LOGO = "/logo.png";
 export const FEATURED = "/featured.png";
+export const KLARNA = "/klarna.png";
+export const MASTER = "/master.png";
+export const STRIPE = "/stripe.png";
 
 // ADDRESS PAGES
 
 export const HOME = "/";
 export const SIGNIN = "/login";
+export const PRODUCTS = "/products";
+export const CART = "/cart"
 
 // PRODUCTS SAMPLE
 
@@ -186,3 +193,5 @@ export const steps: string[] = [
   "Shipping Address",
   "Peyment Method",
 ];
+
+

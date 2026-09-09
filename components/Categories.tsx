@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Button from "./Button";
 
 const categories = [
   {
@@ -95,12 +96,12 @@ const Categories = () => {
   return (
     <div className="relative">
       {canScrollLeft && (
-        <button
+        <Button
           onClick={() => scroll(-150)}
           className="w-12.5 h-full block absolute left-0 top-0 bg-linear-to-l from-transparent to-white z-50"
         >
           <ChevronLeft className="text-amber-400 opacity-80 absolute left-0 -translate-y-1/2" />
-        </button>
+        </Button>
       )}
       <div
         ref={scrollRef}
@@ -119,12 +120,12 @@ const Categories = () => {
         ))}
       </div>
       {canScrollRight && (
-        <button
+        <Button
           onClick={() => scroll(150)}
           className="w-12.5 block h-full absolute right-0 top-0 bg-linear-to-r from-transparent to-white z-50"
         >
           <ChevronRight className="text-amber-400 opacity-80 absolute right-0 -translate-y-1/2" />
-        </button>
+        </Button>
       )}
     </div>
   );

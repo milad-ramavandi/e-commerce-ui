@@ -1,4 +1,4 @@
-import { products } from "@/constants";
+import { PRODUCTS, products } from "@/constants";
 import ProductCard from "./ProductCard";
 import Link from "next/link";
 
@@ -12,7 +12,7 @@ const ProductsList = ({ isHomePage }: { isHomePage: boolean }) => {
       </div>
       {isHomePage && (
         <Link
-          href={"/products"}
+          href={PRODUCTS}
           className="flex justify-end text-sm underline text-gray-500"
         >
           View all Products

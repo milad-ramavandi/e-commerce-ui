@@ -1,9 +1,18 @@
 "use client";
 
-import { cartItems, steps } from "@/constants";
-import { ArrowRight, Trash2 } from "lucide-react";
+import Button from "@/components/Button";
+import Form from "@/components/Form";
+import { cartItems, KLARNA, MASTER, steps, STRIPE } from "@/constants";
+import {
+  paymentMethodInputsFormSchema,
+  shippingAddressInputsFormSchema,
+  TPaymentMethodInputsForm,
+  TshippingAddressInputsForm,
+} from "@/types";
+import { ArrowRight, ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { SubmitHandler } from "react-hook-form";
 
 const CartPage = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -53,22 +62,279 @@ const CartPage = () => {
                     <div className="flex flex-col justify-between">
                       <div className="flex flex-col gap-1">
                         <p className="font-medium text-sm">{item.name}</p>
-                        <p className="text-xs text-gray-500">Quantity: {" "} {item.quantity}</p>
-                        <p className="text-xs text-gray-500">Size: {" "} {item.selectedSize.toUpperCase()}</p>
-                        <p className="text-xs text-gray-500">Color: {" "} {item.selectedColor}</p>
+                        <p className="text-xs text-gray-500">
+                          Quantity: {item.quantity}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Size: {item.selectedSize.toUpperCase()}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Color: {item.selectedColor}
+                        </p>
                       </div>
                       <p className="font-medium">${item.price.toFixed(2)}</p>
                     </div>
                   </div>
-                  <button
+                  <Button
                     type="button"
                     className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 transition-all duration-300 text-red-400 flex items-center justify-center cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
-                  </button>
+                  </Button>
                 </div>
               );
             })}
+          {currentStep === 1 && (
+            <Form<TshippingAddressInputsForm>
+              validationSchema={shippingAddressInputsFormSchema}
+            >
+              {({ register, handleSubmit, formState }) => {
+                const shippingAddressSubmit: SubmitHandler<
+                  TshippingAddressInputsForm
+                > = (values) => {
+                  console.log(values);
+
+                  if (currentStep >= 2) return;
+                  setCurrentStep((prev) => prev + 1);
+                };
+                return (
+                  <form
+                    className="flex flex-col gap-4"
+                    onSubmit={handleSubmit(shippingAddressSubmit)}
+                  >
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="name"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        placeholder="John Doe"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("name")}
+                      />
+                      {formState.errors.name && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.name.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="email"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        placeholder="johndoe@gmail.com"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("email")}
+                      />
+                      {formState.errors.email && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.email.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="phone"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        Phone
+                      </label>
+                      <input
+                        type="text"
+                        id="phone"
+                        placeholder="09120349867"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("phone")}
+                      />
+                      {formState.errors.phone && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.phone.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="address"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        Address
+                      </label>
+                      <input
+                        type="text"
+                        id="address"
+                        placeholder="Red Ruck Main Street"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("address")}
+                      />
+                      {formState.errors.address && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.address.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="city"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        City
+                      </label>
+                      <input
+                        type="text"
+                        id="city"
+                        placeholder="New York"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("city")}
+                      />
+                      {formState.errors.city && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.city.message}
+                        </p>
+                      )}
+                    </div>
+                    <Button
+                      type="submit"
+                      className="w-full bg-gray-800 hover:bg-gray-950 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      <span>Continue</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Button>
+                  </form>
+                );
+              }}
+            </Form>
+          )}
+          {currentStep === 2 && (
+            <Form<TPaymentMethodInputsForm>
+              validationSchema={paymentMethodInputsFormSchema}
+            >
+              {({ register, handleSubmit, formState }) => {
+                const paymentMethodSubmit: SubmitHandler<
+                  TPaymentMethodInputsForm
+                > = (values) => {
+                  console.log(values);
+                };
+                return (
+                  <form
+                    className="flex flex-col gap-4"
+                    onSubmit={handleSubmit(paymentMethodSubmit)}
+                  >
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="cardHolder"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        Name on card
+                      </label>
+                      <input
+                        type="text"
+                        id="cardHolder"
+                        placeholder="John Doe"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("cardHolder")}
+                      />
+                      {formState.errors.cardHolder && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.cardHolder.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="cardNumber"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        Card Number
+                      </label>
+                      <input
+                        type="text"
+                        id="cardNumber"
+                        placeholder="6045905434569876"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("cardNumber")}
+                      />
+                      {formState.errors.cardNumber && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.cardNumber.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="expireDate"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        Expire Date
+                      </label>
+                      <input
+                        type="text"
+                        id="expireDate"
+                        placeholder="01/08"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("expireDate")}
+                      />
+                      {formState.errors.expireDate && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.expireDate.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="CVV"
+                        className="text-xs text-gray-500 font-medium"
+                      >
+                        CVV
+                      </label>
+                      <input
+                        type="text"
+                        id="CVV"
+                        placeholder="9787"
+                        className="border-b border-gray-200 text-sm outline-0"
+                        autoComplete="off"
+                        {...register("cvv")}
+                      />
+                      {formState.errors.cvv && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.cvv.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 mt-4">
+                      <Image src={KLARNA} alt="klarna" width={50} height={25} className="rounded-md"/>
+                      <Image src={MASTER} alt="master" width={50} height={25} className="rounded-md"/>
+                      <Image src={STRIPE} alt="stripe" width={50} height={25} className="rounded-md"/>
+                    </div>
+                    <Button
+                      type="submit"
+                      className="w-full bg-gray-800 hover:bg-gray-950 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      <span>Checkout</span>
+                      <ShoppingCart className="w-3 h-3" />
+                    </Button>
+                  </form>
+                );
+              }}
+            </Form>
+          )}
         </div>
         <div className="w-full h-max lg:w-5/12 shadow-lg border border-gray-100 p-8 rounded-lg flex flex-col gap-8">
           <h2 className="font-semibold">Cart Details</h2>
