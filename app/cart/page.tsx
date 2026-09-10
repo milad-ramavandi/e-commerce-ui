@@ -2,20 +2,23 @@
 
 import Button from "@/components/Button";
 import Form from "@/components/Form";
-import { cartItems, KLARNA, MASTER, steps, STRIPE } from "@/constants";
+import { KLARNA, MASTER, steps, STRIPE } from "@/constants";
+import useShoppingCart from "@/store/shoppingCart";
 import {
   paymentMethodInputsFormSchema,
   shippingAddressInputsFormSchema,
   TPaymentMethodInputsForm,
   TshippingAddressInputsForm,
 } from "@/types";
-import { ArrowRight, ShoppingCart, Trash2 } from "lucide-react";
+import { ArrowRight, Inbox, ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { SubmitHandler } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const { cart, removeFromCart } = useShoppingCart((state) => state);
   return (
     <div className="flex flex-col gap-8 items-center justify-center mt-12">
       <h1 className="text-2xl font-medium">Your Shopping Cart</h1>
@@ -43,10 +46,11 @@ const CartPage = () => {
       <div className="w-full flex flex-col lg:flex-row gap-16">
         <div className="w-full lg:w-7/12 shadow-lg border border-gray-100 p-8 rounded-lg flex flex-col gap-8">
           {currentStep === 0 &&
-            cartItems.map((item) => {
+            cart.length > 0 &&
+            cart.map((item) => {
               return (
                 <div
-                  key={item.id}
+                  key={item.id + item.selectedColor + item.selectedSize}
                   className="flex items-center justify-between"
                 >
                   <div className="flex gap-8">
@@ -78,12 +82,22 @@ const CartPage = () => {
                   <Button
                     type="button"
                     className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 transition-all duration-300 text-red-400 flex items-center justify-center cursor-pointer"
+                    onClick={() => {
+                      removeFromCart(item);
+                      toast.success("Product deleted successfully")
+                    }}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
               );
             })}
+          {currentStep === 0 && cart.length === 0 && (
+            <div className="flex flex-col h-full items-center justify-center gap-2">
+              <Inbox className="w-10 h-10 text-gray-600" />
+              <span className="text-sm text-gray-500">No Product</span>
+            </div>
+          )}
           {currentStep === 1 && (
             <Form<TshippingAddressInputsForm>
               validationSchema={shippingAddressInputsFormSchema}
@@ -319,9 +333,27 @@ const CartPage = () => {
                       )}
                     </div>
                     <div className="flex items-center gap-2 mt-4">
-                      <Image src={KLARNA} alt="klarna" width={50} height={25} className="rounded-md"/>
-                      <Image src={MASTER} alt="master" width={50} height={25} className="rounded-md"/>
-                      <Image src={STRIPE} alt="stripe" width={50} height={25} className="rounded-md"/>
+                      <Image
+                        src={KLARNA}
+                        alt="klarna"
+                        width={50}
+                        height={25}
+                        className="rounded-md"
+                      />
+                      <Image
+                        src={MASTER}
+                        alt="master"
+                        width={50}
+                        height={25}
+                        className="rounded-md"
+                      />
+                      <Image
+                        src={STRIPE}
+                        alt="stripe"
+                        width={50}
+                        height={25}
+                        className="rounded-md"
+                      />
                     </div>
                     <Button
                       type="submit"
@@ -342,7 +374,8 @@ const CartPage = () => {
             <div className="flex justify-between text-sm">
               <p className="text-gray-500">Total Without Discount</p>
               <p className="font-medium">
-                {cartItems
+                $
+                {cart
                   .reduce((acc, item) => (acc += item.price * item.quantity), 0)
                   .toFixed(2)}
               </p>
@@ -359,24 +392,24 @@ const CartPage = () => {
             <div className="flex justify-between">
               <p className="text-gray-800 font-semibold">Total</p>
               <p className="font-medium">
-                {cartItems
+                $
+                {cart
                   .reduce((acc, item) => (acc += item.price * item.quantity), 0)
                   .toFixed(2)}
               </p>
             </div>
           </div>
           {currentStep === 0 && (
-            <button
+            <Button
               type="button"
               className="w-full bg-gray-800 hover:bg-gray-950 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
               onClick={() => {
-                if (currentStep >= 2) return;
-                setCurrentStep((prev) => prev + 1);
+                setCurrentStep(1);
               }}
             >
               <span>Continue</span>
               <ArrowRight className="w-3 h-3" />
-            </button>
+            </Button>
           )}
         </div>
       </div>

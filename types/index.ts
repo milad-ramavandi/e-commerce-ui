@@ -24,7 +24,6 @@ export interface ICart extends IProduct {
 }
 
 export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  className?:string;
   children:React.ReactNode;
 }
 
@@ -48,3 +47,11 @@ export const paymentMethodInputsFormSchema = Yup.object({}).shape({
 });
 
 export type TPaymentMethodInputsForm = Yup.InferType<typeof paymentMethodInputsFormSchema>
+
+
+export interface IUseShoppingCart {
+  cart:ICart[];
+  addToCart: (product:ICart) => void;
+  removeFromCart: (product:ICart) => void;
+  clearCart: () => void;
+}

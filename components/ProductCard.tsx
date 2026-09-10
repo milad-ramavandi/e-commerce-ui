@@ -1,12 +1,17 @@
 "use client";
 
+import useShoppingCart from "@/store/shoppingCart";
 import { IControlSizeAndColor, IProduct } from "@/types";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import Button from "./Button";
+import { PRODUCTS } from "@/constants";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product }: { product: IProduct }) => {
+  const addToCart = useShoppingCart((state) => state.addToCart);
   const [controlSizeAndColor, setControlSizeAndColor] =
     useState<IControlSizeAndColor>({
       size: product.sizes[0],
@@ -17,7 +22,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   };
   return (
     <div className="shadow-lg rounded-lg overflow-hidden">
-      <Link href={`/product/${product.id}`}>
+      <Link href={`${PRODUCTS}/${product.id}`}>
         <div className="relative aspect-2/3">
           <Image
             src={product.images[controlSizeAndColor.color]}
@@ -65,13 +70,22 @@ const ProductCard = ({ product }: { product: IProduct }) => {
         </div>
         <div className="flex items-center justify-between">
           <p className="font-medium">${product.price.toFixed(2)}</p>
-          <button
+          <Button
             type="button"
             className="flex items-center gap-2 ring-1 ring-gray-200 shadow-lg rounded-md px-2 py-1 text-sm cursor-pointer hover:text-white hover:bg-black transition-all duration-300"
+            onClick={() => {
+              addToCart({
+                ...product,
+                selectedColor: controlSizeAndColor.color,
+                selectedSize: controlSizeAndColor.size,
+                quantity: 1,
+              });
+              toast.success("Product added to cart.");
+            }}
           >
             <ShoppingCart className="w-4 h-4" />
             <span>Add to Cart</span>
-          </button>
+          </Button>
         </div>
       </div>
     </div>
