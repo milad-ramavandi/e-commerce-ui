@@ -1,8 +1,9 @@
 "use client";
 
 import Button from "@/components/Button";
+import CardsInfo from "@/components/CardsInfo";
 import Form from "@/components/Form";
-import { KLARNA, MASTER, steps, STRIPE } from "@/constants";
+import { steps } from "@/constants";
 import useShoppingCart from "@/store/shoppingCart";
 import {
   paymentMethodInputsFormSchema,
@@ -67,13 +68,13 @@ const CartPage = () => {
                       <div className="flex flex-col gap-1">
                         <p className="font-medium text-sm">{item.name}</p>
                         <p className="text-xs text-gray-500">
-                          Quantity: {item.quantity}
+                          Quantity: {item.selectedQuantity}
                         </p>
                         <p className="text-xs text-gray-500">
                           Size: {item.selectedSize.toUpperCase()}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Color: {item.selectedColor}
+                          Color: {item.selectedColor[0].toUpperCase() + item.selectedColor.slice(1)}
                         </p>
                       </div>
                       <p className="font-medium">${item.price.toFixed(2)}</p>
@@ -332,29 +333,7 @@ const CartPage = () => {
                         </p>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 mt-4">
-                      <Image
-                        src={KLARNA}
-                        alt="klarna"
-                        width={50}
-                        height={25}
-                        className="rounded-md"
-                      />
-                      <Image
-                        src={MASTER}
-                        alt="master"
-                        width={50}
-                        height={25}
-                        className="rounded-md"
-                      />
-                      <Image
-                        src={STRIPE}
-                        alt="stripe"
-                        width={50}
-                        height={25}
-                        className="rounded-md"
-                      />
-                    </div>
+                    <CardsInfo/>
                     <Button
                       type="submit"
                       className="w-full bg-gray-800 hover:bg-gray-950 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
@@ -376,7 +355,7 @@ const CartPage = () => {
               <p className="font-medium">
                 $
                 {cart
-                  .reduce((acc, item) => (acc += item.price * item.quantity), 0)
+                  .reduce((acc, item) => (acc += item.price * item.selectedQuantity), 0)
                   .toFixed(2)}
               </p>
             </div>
@@ -394,7 +373,7 @@ const CartPage = () => {
               <p className="font-medium">
                 $
                 {cart
-                  .reduce((acc, item) => (acc += item.price * item.quantity), 0)
+                  .reduce((acc, item) => (acc += item.price * item.selectedQuantity), 0)
                   .toFixed(2)}
               </p>
             </div>

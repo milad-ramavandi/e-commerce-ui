@@ -1,6 +1,4 @@
-import { IProduct } from "@/types";
-
-
+import { ICardInfo, IProduct } from "@/types";
 
 // ADDRESS LOCAL IMAGE
 
@@ -15,7 +13,7 @@ export const STRIPE = "/stripe.png";
 export const HOME = "/";
 export const SIGNIN = "/login";
 export const PRODUCTS = "/products";
-export const CART = "/cart"
+export const CART = "/cart";
 
 // PRODUCTS SAMPLE
 
@@ -130,10 +128,18 @@ export const products: IProduct[] = [
   },
 ];
 
+//STEPS
+
 export const steps: string[] = [
   "Shopping Cart",
   "Shipping Address",
   "Peyment Method",
 ];
 
+//CARD INFO
 
+export const cardsInfo: ICardInfo[] = [
+  { src: KLARNA, alt: "klarna" },
+  { src: MASTER, alt: "master" },
+  { src: STRIPE, alt: "stripe" },
+];

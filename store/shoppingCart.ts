@@ -11,9 +11,9 @@ const useShoppingCart = create<IUseShoppingCart>()(
           if (
             state.cart.some(
               (item) =>
-                item.id === product.id &&
+                (item.id === product.id &&
                 item.selectedColor === product.selectedColor &&
-                item.selectedSize === product.selectedSize,
+                item.selectedSize === product.selectedSize)
             )
           ) {
             return {
@@ -24,7 +24,7 @@ const useShoppingCart = create<IUseShoppingCart>()(
                     item.selectedColor === product.selectedColor &&
                     item.selectedSize === product.selectedSize)
                 ),
-                { ...product, quantity: product.quantity + 1 },
+                { ...product, quantity: Number(product.selectedQuantity) + 1 },
               ],
             };
           } else {
@@ -42,7 +42,7 @@ const useShoppingCart = create<IUseShoppingCart>()(
         })),
       clearCart: () => set({ cart: [] }),
     }),
-    { name: "cart" },
+    { name: "cart"},
   ),
 );
 
