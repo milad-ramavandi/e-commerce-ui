@@ -23,7 +23,7 @@ const ProductInteraction = ({
   ) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set(type, value.toString());
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, {scroll:false});
   };
 
   return (
