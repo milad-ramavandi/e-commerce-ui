@@ -13,11 +13,11 @@ const product: IProduct = {
   price: 39.9,
   sizes: ["s", "m", "l", "xl", "xxl"],
   colors: ["gray", "purple", "green"],
-  images: {
-    gray: "/products/1g.png",
-    purple: "/products/1p.png",
-    green: "/products/1gr.png",
-  },
+  images: [
+    { color: "gray", imageUrl: "/products/1g.png" },
+    { color: "purple", imageUrl: "/products/1p.png" },
+    { color: "green", imageUrl: "/products/1gr.png" },
+  ],
 };
 
 const ProductPage = async ({ params, searchParams }: IProductPage) => {
@@ -25,16 +25,22 @@ const ProductPage = async ({ params, searchParams }: IProductPage) => {
   const selectedColor = color ? color : product.colors[0];
   const selectedSize = size ? size : product.sizes[0];
   const selectedQuantity = quantity ? quantity : 1;
+  const productImage = product.images.find(
+    (item) => item.color === selectedColor,
+  )?.imageUrl;
   return (
     <div className="flex flex-col gap-4 md:flex-row md:gap-12 mt-12">
-      <div className="relative w-full md:w-5/12 aspect-2/3">
-        <Image
-          src={product.images[selectedColor]}
-          alt={product.name}
-          fill
-          className="object-contain rounded-md"
-        />
-      </div>
+      {productImage && (
+        <div className="relative w-full md:w-5/12 aspect-2/3">
+          <Image
+            src={productImage}
+            alt={product.name}
+            fill
+            className="object-contain rounded-md"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+      )}
       <div className="w-full md:w-7/12 flex flex-col gap-4">
         <h1 className="text-2xl font-medium">{product.name}</h1>
         <p className="text-gray-500">{product.description}</p>

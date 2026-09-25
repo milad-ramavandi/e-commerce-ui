@@ -25,19 +25,24 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   ) => {
     setProductIntraction((prev) => ({ ...prev, [type]: value }));
   };
+  const productImage = product.images.find(
+    (item) => item.color === productIntraction.selectedColor,
+  )?.imageUrl;
   return (
     <div className="shadow-lg rounded-lg overflow-hidden">
-      <Link href={`${PRODUCTS}/${product.id}`}>
-        <div className="relative aspect-2/3">
-          <Image
-            src={product.images[productIntraction.selectedColor]}
-            alt={product.name}
-            fill
-            className="object-cover hover:scale-105 transition-all duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        </div>
-      </Link>
+      {productImage && (
+        <Link href={`${PRODUCTS}/${product.id}`}>
+          <div className="relative aspect-2/3">
+            <Image
+              src={productImage}
+              alt={product.name}
+              fill
+              className="object-cover hover:scale-105 transition-all duration-300"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
+        </Link>
+      )}
       <div className="flex flex-col gap-4 p-4">
         <h1 className="font-medium line-clamp-1">{product.name}</h1>
         <p className="text-sm text-gray-500 line-clamp-2">

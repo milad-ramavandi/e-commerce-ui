@@ -49,21 +49,26 @@ const CartPage = () => {
           {currentStep === 0 &&
             cart.length > 0 &&
             cart.map((item) => {
+              const productImage = item.images.find(
+                (col_img) => col_img.color === item.selectedColor,
+              )?.imageUrl;
               return (
                 <div
                   key={item.id + item.selectedColor + item.selectedSize}
                   className="flex items-center justify-between"
                 >
                   <div className="flex gap-8">
-                    <div className="relative w-32 h-32 bg-gray-50 rounded-lg overflow-hidden">
-                      <Image
-                        src={item.images[item.selectedColor]}
-                        alt={item.name}
-                        fill
-                        className="object-contain"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    </div>
+                    {productImage && (
+                      <div className="relative w-32 h-32 bg-gray-50 rounded-lg overflow-hidden">
+                        <Image
+                          src={productImage}
+                          alt={item.name}
+                          fill
+                          className="object-contain"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
+                    )}
                     <div className="flex flex-col justify-between">
                       <div className="flex flex-col gap-1">
                         <p className="font-medium text-sm">{item.name}</p>
@@ -74,10 +79,12 @@ const CartPage = () => {
                           Size: {item.selectedSize.toUpperCase()}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Color: {item.selectedColor[0].toUpperCase() + item.selectedColor.slice(1)}
+                          Color:{" "}
+                          {item.selectedColor[0].toUpperCase() +
+                            item.selectedColor.slice(1)}
                         </p>
                       </div>
-                      <p className="font-medium">${item.price.toFixed(2)}</p>
+                      <p className="font-medium">${(item.price * item.selectedQuantity).toFixed(2)}</p>
                     </div>
                   </div>
                   <Button
@@ -85,7 +92,7 @@ const CartPage = () => {
                     className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 transition-all duration-300 text-red-400 flex items-center justify-center cursor-pointer"
                     onClick={() => {
                       removeFromCart(item);
-                      toast.success("Product deleted successfully")
+                      toast.success("Product deleted successfully");
                     }}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -333,7 +340,7 @@ const CartPage = () => {
                         </p>
                       )}
                     </div>
-                    <CardsInfo/>
+                    <CardsInfo />
                     <Button
                       type="submit"
                       className="w-full bg-gray-800 hover:bg-gray-950 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
@@ -355,7 +362,10 @@ const CartPage = () => {
               <p className="font-medium">
                 $
                 {cart
-                  .reduce((acc, item) => (acc += item.price * item.selectedQuantity), 0)
+                  .reduce(
+                    (acc, item) => (acc += item.price * item.selectedQuantity),
+                    0,
+                  )
                   .toFixed(2)}
               </p>
             </div>
@@ -373,7 +383,10 @@ const CartPage = () => {
               <p className="font-medium">
                 $
                 {cart
-                  .reduce((acc, item) => (acc += item.price * item.selectedQuantity), 0)
+                  .reduce(
+                    (acc, item) => (acc += item.price * item.selectedQuantity),
+                    0,
+                  )
                   .toFixed(2)}
               </p>
             </div>

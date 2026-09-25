@@ -1,6 +1,11 @@
 import { ButtonHTMLAttributes } from "react";
 import * as Yup from "yup";
 
+interface IProductImage {
+  color:string;
+  imageUrl:string;
+}
+
 export interface IProduct {
   id: string | number;
   name: string;
@@ -9,7 +14,7 @@ export interface IProduct {
   price: number;
   sizes: string[];
   colors: string[];
-  images: Record<string, string>;
+  images: IProductImage[];
 }
 
 export interface IProductInteraction {
